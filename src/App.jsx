@@ -1,23 +1,27 @@
 import { useState } from "react";
+import Filter from "./components/Filter";
+import PersonForm from "./components/PersonForm";
+import Persons from "./components/Persons";
 
 const App = () => {
   const [persons, setPersons] = useState([
-    {
-      name: "Artos Hellas",
-      id: "1",
-    },
+    { name: "Arto Hellas", number: "040-123456", id: 1 },
+    { name: "Ada Lovelace", number: "39-44-5323523", id: 2 },
+    { name: "Dan Abramov", number: "12-43-234345", id: 3 },
+    { name: "Mary Poppendieck", number: "39-23-6423122", id: 4 },
   ]);
 
-  // console.log(persons)
-
   const [newName, setNewName] = useState("");
+  const [newNumber, setNewNumber] = useState("");
+  const [newFilter, setFilter] = useState("");
 
-  const addName = (event) => {
+  const addNewContact = (event) => {
     event.preventDefault();
     // console.log("button clicked", event.target)
 
     const newContact = {
       name: newName,
+      number: newNumber,
       id: String(persons.length + 1),
     };
 
@@ -31,6 +35,7 @@ const App = () => {
     }
 
     setPersons(persons.concat(newContact));
+    setNewNumber("");
     setNewName("");
   };
 
@@ -41,25 +46,33 @@ const App = () => {
     setNewName(event.target.value);
   };
 
+  const handleNumberChange = (event) => {
+    // console.log(event.target.value)
+    setNewNumber(event.target.value);
+  };
+
+  const handleFilterChange = (event) => {
+    // console.log(event.target.value)
+    setFilter(event.target.value);
+  };
+
   return (
     <div>
-      <h2>Phone book</h2>
-      <form onSubmit={addName}>
-        <div>
-          name:
-          <input value={newName} onChange={handleNameChange} />
-        </div>
-        <div>
-          <button type="submit">Add</button>
-        </div>
-      </form>
+      <Filter newFilter={newFilter} handleFilterChange={handleFilterChange} />
 
-      <h2>Numbers</h2>
-      <ul>
-        {persons.map((person) => (
-          <li key={person.id}>{person.name}</li>
-        ))}
-      </ul>
+      <h3>Add a new Contact</h3>
+
+      <PersonForm
+        newName={newName}
+        newNumber={newNumber}
+        handleNameChange={handleNameChange}
+        handleNumberChange={handleNumberChange}
+        addNewContact={addNewContact}
+      />
+
+      <h3>Numbers</h3>
+      <Persons persons={persons} />
+
       <div>debug: {newName}</div>
     </div>
   );
