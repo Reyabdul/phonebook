@@ -3,6 +3,7 @@ import axios from "axios";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
+import personService from "./services/persons"
 
 const App = () => {
 
@@ -11,38 +12,53 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [newFilter, setFilter] = useState("");
 
+
+  // useEffect(() => {
+  //   // console.log("'effect' initialized")
+  //   axios
+  //   .get("http://localhost:3000/persons")
+  //   .then(response => {
+  //     // console.log("fulfilled")
+  //     setPersons(response.data)
+  //   })
+  // }, [])  
+
+
   useEffect(() => {
-    console.log("'effect' initialized")
-    axios
-    .get("http://localhost:3000/persons")
-    .then(response => {
-      console.log("fulfilled")
-      setPersons(response.data)
-    })
-  }, [])  
+    personService
+      .getAll()
+      .then(allPerson => {
+        setPersons(allPerson)
+      })
+  }, [])
+
+  // console.log(persons)
 
   const addNewContact = (event) => {
     event.preventDefault();
     // console.log("button clicked", event.target)
-
-    const newContact = {
+    const personObject = {
       name: newName,
       number: newNumber,
-      id: String(persons.length + 1),
+      // id: String(persons.length + 1),
     };
 
     const existingNames = persons.map((person) => {
       return person.name;
     });
 
-    if (existingNames.includes(newContact.name)) {
+    if (existingNames.includes(personObject.name)) {
       alert(`${newName} already exists`);
       return false;
     }
 
-    setPersons(persons.concat(newContact));
-    setNewNumber("");
-    setNewName("");
+    personService
+      .create(personObject)
+      .then(returnedPerson => {
+        setPersons(persons.concat(returnedPerson))
+        setNewName("")
+        setNewNumber("")
+      })
   };
 
   // console.log(persons)

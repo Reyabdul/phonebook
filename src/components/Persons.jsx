@@ -2,7 +2,7 @@ import React from "react";
 
 const Persons = ({persons}) => {
 
-  console.log(persons)
+  // console.log(persons)
   return (
     <div>
       <ul>
