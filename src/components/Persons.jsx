@@ -1,19 +1,14 @@
 import React from "react";
 
-const Persons = ({persons}) => {
+const Persons = ({person, handleDelete}) => {
 
-  // console.log(persons)
+  console.log(person)
   return (
     <div>
-      <ul>
-        {persons.map((person) => (
-          <li 
-            key={person.id}
-          >
-            {person.name} {person.number}
-          </li>
-        ))}
-      </ul>
+      <li>
+        {person.name} {person.number}&nbsp;
+        <button onClick={handleDelete}>delete</button>
+      </li>
     </div>
   );
 };

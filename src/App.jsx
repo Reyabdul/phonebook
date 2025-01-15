@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
@@ -34,6 +33,7 @@ const App = () => {
 
   // console.log(persons)
 
+  //ADD
   const addNewContact = (event) => {
     event.preventDefault();
     // console.log("button clicked", event.target)
@@ -61,6 +61,20 @@ const App = () => {
       })
   };
 
+
+  // DELETE
+  const handleDelete = (person) => {
+    const msg = `Delete ${person.name}?`
+    const confirm = window.confirm(msg)
+    if (confirm) {
+      personService
+        .deletePerson(person.id)
+        .then(persons =>
+          setPersons(persons)
+        
+    )}
+    return alert(`${person.name} successfully deleted`)
+  }
   // console.log(persons)
 
   const handleNameChange = (event) => {
@@ -93,9 +107,15 @@ const App = () => {
       />
 
       <h3>Numbers</h3>
-      <Persons persons={persons} />
-
-      <div>debug: {newName}</div>
+      <ul>
+        {persons.map(person =>
+          <Persons
+            key={person.name}
+            person={person}
+            handleDelete={() => handleDelete(person)} 
+          />
+        )}
+      </ul>
     </div>
   );
 };
